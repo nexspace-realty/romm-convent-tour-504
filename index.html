@@ -1,272 +1,190 @@
-<title>Romm Convent · Type C11</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Romm Convent · Type C6 · Nexspace Realty</title>
+<meta name="description" content="360° virtual tour – Romm Convent, Type C6, 2BR 2BA, 96.95 sqm, Floor 19">
+<!-- Share preview (LINE / Facebook) -->
+<meta property="og:title" content="Nexspace Realty Exclusive at Romm Convent">
+<meta property="og:description" content="Type C6 · 96.95 sqm · 2BR, 2BA · Floor 19 — 360° virtual tour">
+<meta property="og:image" content="images/01-living-room.jpg">
+
+<link rel="stylesheet" href="vendor/pannellum.css">
+<script src="vendor/pannellum.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ---- Pannellum 2.5.6 engine styles (vendored, required for the viewer surface) ---- */
-.pnlm-container{margin:0;padding:0;overflow:hidden;position:relative;cursor:default;width:100%;height:100%;font-family:Helvetica,"Nimbus Sans L","Liberation Sans",Arial,sans-serif;background:#111;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;-ms-user-select:none;user-select:none;outline:0;line-height:1.4;contain:content}.pnlm-container *{box-sizing:content-box}.pnlm-ui{position:absolute;width:100%;height:100%;z-index:1}.pnlm-grab{cursor:grab}.pnlm-grabbing{cursor:grabbing}.pnlm-container:-moz-full-screen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:-webkit-full-screen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:-ms-fullscreen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:fullscreen{height:100%!important;width:100%!important;position:static!important}.pnlm-render-container{cursor:inherit;position:absolute;height:100%;width:100%}.pnlm-load-box{position:absolute;top:50%;left:50%;width:200px;height:150px;margin:-75px 0 0 -100px;background-color:rgba(0,0,0,0.7);border-radius:3px;text-align:center;font-size:20px;display:none;color:#fff}.pnlm-load-box p{margin:20px 0}.pnlm-lbox{position:absolute;top:50%;left:50%;width:20px;height:20px;margin:-10px 0 0 -10px;display:none}.pnlm-loading{animation-duration:1.5s;-webkit-animation-duration:1.5s;animation-name:pnlm-mv;-webkit-animation-name:pnlm-mv;animation-iteration-count:infinite;-webkit-animation-iteration-count:infinite;animation-timing-function:linear;-webkit-animation-timing-function:linear;height:10px;width:10px;background-color:#fff;position:relative}@keyframes pnlm-mv{from{left:0;top:0}25%{left:10px;top:0}50%{left:10px;top:10px}75%{left:0;top:10px}to{left:0;top:0}}.pnlm-error-msg{display:none}.pnlm-hotspot-base{position:absolute;visibility:hidden;cursor:default;vertical-align:middle;top:0;z-index:1}.pnlm-world{position:absolute;left:50%;top:50%}.pnlm-face{position:absolute;-webkit-transform-origin:0 0;transform-origin:0 0}.pnlm-dragfix,.pnlm-preview-img{position:absolute;height:100%;width:100%}.pnlm-preview-img{background-size:cover;background-position:center}.pnlm-fade-img{position:absolute;top:0;left:0}.pnlm-pointer{cursor:pointer}
+  /* Avenir Next on Apple devices (the font in your example), Nunito Sans everywhere else */
+  :root { --font: "Avenir Next", "Avenir", "Nunito Sans", system-ui, sans-serif; }
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; font-family: var(--font); }
+  #pano { position: fixed; inset: 0; }
 
-/* ---- Page design ----
-   Layout: full-bleed panorama with no chrome — just the identification
-   caption (top-left, set directly on the image) and a floating pill bar
-   of room names (bottom-center). Matches the house tour template:
-   one neutral sans throughout, nothing boxed or carded. */
-:root{
-  --fg:#ffffff;
-  --muted:rgba(255,255,255,.82);
-  --pill-bg:rgba(20,20,22,.55);
-  --pill-bg-hover:rgba(20,20,22,.72);
-  --pill-active-bg:#ffffff;
-  --pill-active-fg:#15161a;
-  --shadow-text:0 1px 3px rgba(0,0,0,.65), 0 1px 14px rgba(0,0,0,.35);
-  color-scheme:dark;
-}
+  /* ---------- Unit info, top-left ---------- */
+  .info {
+    position: fixed; top: 14px; left: 16px; z-index: 5; color: #fff; pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,.55);
+  }
+  .info h1 { margin: 0 0 6px; font-size: clamp(16px, 2.2vw, 24px); font-weight: 700; }
+  .info p  { margin: 2px 0; font-size: clamp(12px, 1.3vw, 15px); font-weight: 500; opacity: .95; }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  background:#0c0c0d;
-  color:var(--fg);
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  padding-inline:0;
-  overflow:hidden;
-}
+  /* ---------- Fullscreen button, top-right ---------- */
+  .fs {
+    position: fixed; top: 12px; right: 12px; z-index: 5; width: 40px; height: 40px;
+    border: 0; border-radius: 6px; background: rgba(255,255,255,.85); cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .fs svg { width: 22px; height: 22px; }
 
-.stage{
-  position:relative;
-  width:100%;
-  height:100vh;
-  height:100dvh;
-  background:#000;
-}
-#pano{position:absolute;inset:0}
+  /* ---------- Room buttons, bottom ---------- */
+  .rooms {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+    display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom));
+    background: linear-gradient(transparent, rgba(0,0,0,.45));
+  }
+  .rooms::-webkit-scrollbar { display: none; }
+  .rooms button {
+    flex: 0 0 auto; font-family: var(--font); font-size: 15px; font-weight: 600;
+    padding: 10px 18px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    color: #fff; background: rgba(40,40,40,.82); border: 1px solid rgba(255,255,255,.12);
+    transition: background .15s, color .15s;
+  }
+  .rooms button:hover { background: rgba(70,70,70,.9); }
+  .rooms button.active { background: #fff; color: #111; font-weight: 700; }
 
-/* identification caption */
-.caption{
-  position:absolute;
-  top:calc(20px + env(safe-area-inset-top,0px));
-  left:24px;
-  right:24px;
-  z-index:4;
-  pointer-events:none;
-  text-shadow:var(--shadow-text);
-}
-.caption h1{
-  margin:0 0 6px;
-  font-size:clamp(17px,2.1vw,22px);
-  font-weight:700;
-  letter-spacing:-.01em;
-}
-.caption p{
-  margin:0;
-  font-size:14px;
-  line-height:1.55;
-  font-weight:500;
-  color:var(--muted);
-}
+  /* ---------- Floor badge that covers the tripod ---------- */
+  .badge {
+    width: 0; height: 0; /* hotspot anchor; the label is centred on it */
+  }
+  .badge > * {
+    position: absolute; transform: translate(-50%, -50%);
+    display: block; text-align: center; white-space: nowrap; text-decoration: none;
+    font-family: var(--font); font-weight: 700; font-size: 17px; line-height: 1.35; color: #1b2230;
+    background: rgba(255,255,255,.95); padding: 10px 22px; border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  }
 
-/* pill room nav */
-.nav-wrap{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:calc(22px + env(safe-area-inset-bottom,0px));
-  z-index:4;
-  display:flex;
-  justify-content:center;
-  padding:0 16px;
-}
-.nav{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  max-width:100%;
-  padding:4px 2px;
-  scrollbar-width:none;
-}
-.nav::-webkit-scrollbar{display:none}
-.pill{
-  flex:0 0 auto;
-  appearance:none;
-  border:none;
-  cursor:pointer;
-  font-family:inherit;
-  font-size:14px;
-  font-weight:600;
-  letter-spacing:-.005em;
-  color:var(--fg);
-  background:var(--pill-bg);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:11px 20px;
-  border-radius:999px;
-  transition:background .15s ease, color .15s ease, transform .1s ease;
-  white-space:nowrap;
-}
-.pill:hover{background:var(--pill-bg-hover)}
-.pill:active{transform:scale(.97)}
-.pill.active{background:var(--pill-active-bg);color:var(--pill-active-fg)}
-.pill:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  /* hide Pannellum's own controls & credits — we use our own UI */
+  .pnlm-controls-container, .pnlm-about-msg { display: none !important; }
+  .pnlm-load-box { font-family: var(--font); }
 
-.hint{
-  position:absolute;
-  left:50%;
-  bottom:calc(84px + env(safe-area-inset-bottom,0px));
-  transform:translateX(-50%);
-  font-size:12.5px;
-  font-weight:500;
-  color:var(--muted);
-  pointer-events:none;
-  text-shadow:var(--shadow-text);
-  transition:opacity .6s ease;
-  white-space:nowrap;
-  z-index:4;
-}
-.hint[hidden]{display:none}
-
-.stage-fade{
-  position:absolute;inset:0;background:#0c0c0d;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity .35s ease;
-  pointer-events:none;
-  opacity:0;
-  z-index:3;
-}
-.stage-fade.show{opacity:1;pointer-events:auto}
-.spin{
-  width:26px;height:26px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.2);
-  border-top-color:#fff;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-@media (max-width:560px){
-  .caption{left:16px;right:16px;top:calc(14px + env(safe-area-inset-top,0px))}
-  .caption p{font-size:12.5px}
-  .pill{padding:9px 15px;font-size:13px}
-  .nav-wrap{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
-}
+  @media (max-width: 600px) {
+    .rooms button { font-size: 13px; padding: 8px 14px; }
+    .badge > * { font-size: 14px; padding: 8px 16px; }
+  }
 </style>
+</head>
+<body>
 
-<div class="stage">
-  <div id="pano"></div>
+<div id="pano"></div>
 
-  <div class="caption">
-    <h1>Nexspace Realty Exclusive at Romm Convent</h1>
-    <p>Type C11 &middot; 117 sq.m.<br>2BR Plus, 2BA<br>Floor 5</p>
-  </div>
-
-  <div class="hint" id="hint">Drag to look around &nbsp;&middot;&nbsp; scroll to zoom</div>
-
-  <div class="nav-wrap">
-    <nav class="nav" id="nav" aria-label="Rooms"></nav>
-  </div>
-
-  <div class="stage-fade" id="stageFade"><div class="spin"></div></div>
+<div class="info">
+  <h1 id="title"></h1>
+  <div id="details"></div>
 </div>
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+<button class="fs" id="fsBtn" aria-label="Fullscreen">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+</button>
+
+<nav class="rooms" id="rooms"></nav>
+
 <script>
-(function(){
-  var rooms = [
-    { slug:"entrance",        file:"01-entrance.jpg",       name:"Entrance" },
-    { slug:"living-room",     file:"02-living-room.jpg",    name:"Living room" },
-    { slug:"powder-room",     file:"03-powder-room.jpg",    name:"Powder room" },
-    { slug:"hallway",         file:"04-hallway.jpg",        name:"Hallway" },
-    { slug:"guest-bathroom",  file:"05-guest-bathroom.jpg", name:"Guest bathroom" },
-    { slug:"master-hall",     file:"06-master-hall.jpg",    name:"Master hall" },
-    { slug:"master-bathroom", file:"07-master-bathroom.jpg",name:"Master bathroom" },
-    { slug:"master-bedroom",  file:"08-master-bedroom.jpg", name:"Master bedroom" },
-    { slug:"bedroom-2",       file:"09-bedroom-view.jpg",   name:"Bedroom 2" },
-    { slug:"kitchen-dining",  file:"10-kitchen-dining.jpg", name:"Kitchen" }
-  ];
+/* =====================================================================
+   EDIT EVERYTHING IN THIS BLOCK — that's all you need to change
+   for a new unit. Copy the whole folder, swap images, edit below.
+   ===================================================================== */
+const UNIT = {
+  title:   "Nexspace Realty Exclusive at Romm Convent",
+  details: ["Type C6 · 96.95 sqm", "2BR, 2BA", "Floor 19"],
+};
 
-  var scenes = {};
-  rooms.forEach(function(r){
-    scenes[r.slug] = {
-      type:"equirectangular",
-      panorama:r.file,
-      title:r.name,
-      hfov:112,
-      minHfov:50,
-      maxHfov:120,
-      pitch:2,
-      yaw:0,
-      autoLoad:true
-    };
+const CONTACT = {
+  line1: "Nexspace Realty",
+  line2: "LINE ID: @nexspace",
+  link:  "https://line.me/R/ti/p/@nexspace",   // tap the badge to add you on LINE ("" = not clickable)
+};
+
+// Order here = order of the buttons. First one opens first.
+// yaw = which direction the view starts facing (degrees, -180 to 180).
+const ROOMS = [
+  { id: "living",    label: "Living room",     image: "images/01-living-room.jpg",     yaw: 0 },
+  { id: "balcony",   label: "Balcony",         image: "images/02-balcony.jpg",         yaw: 0 },
+  { id: "hallway",   label: "Hallway",         image: "images/03-hallway.jpg",         yaw: 0 },
+  { id: "bed2",      label: "Bedroom 2",       image: "images/04-bedroom-2.jpg",       yaw: 0 },
+  { id: "bath2",     label: "Bathroom 2",      image: "images/05-bathroom-2.jpg",      yaw: 0 },
+  { id: "master",    label: "Master bedroom",  image: "images/06-master-bedroom.jpg",  yaw: 0 },
+  { id: "masterbath",label: "Master bathroom", image: "images/07-master-bathroom.jpg", yaw: 0 },
+  { id: "closet",    label: "Built-in closet", image: "images/08-built-in-closet.jpg", yaw: 0 },
+  { id: "view",      label: "Open view",       image: "images/09-open-view.jpg",       yaw: 0 },
+  { id: "dining",    label: "Dining",          image: "images/10-dining.jpg",          yaw: 0 },
+];
+/* ===================================================================== */
+
+// Unit info
+document.getElementById("title").textContent = UNIT.title;
+document.getElementById("details").innerHTML = UNIT.details.map(t => `<p>${t}</p>`).join("");
+
+// Floor badge (sits straight down, over the tripod)
+function makeBadge(div) {
+  div.classList.add("badge");
+  const a = document.createElement(CONTACT.link ? "a" : "span");
+  if (CONTACT.link) { a.href = CONTACT.link; a.target = "_blank"; a.rel = "noopener"; }
+  a.innerHTML = `${CONTACT.line1}<br>${CONTACT.line2}`;
+  // keep it a real link (Pannellum would otherwise treat the tap as a drag)
+  a.addEventListener("mousedown", e => e.stopPropagation());
+  a.addEventListener("touchstart", e => e.stopPropagation());
+  div.appendChild(a);
+}
+
+// Build scenes
+const scenes = {};
+ROOMS.forEach(r => {
+  scenes[r.id] = {
+    type: "equirectangular",
+    panorama: r.image,
+    yaw: r.yaw, pitch: 0, hfov: 100,
+    hotSpots: [{ pitch: -90, yaw: 0, cssClass: "badge", createTooltipFunc: makeBadge }],
+  };
+});
+
+const viewer = pannellum.viewer("pano", {
+  default: { firstScene: ROOMS[0].id, autoLoad: true, sceneFadeDuration: 600, minHfov: 50, maxHfov: 120 },
+  scenes,
+  showControls: false,
+  compass: false,
+});
+
+// Room buttons
+const nav = document.getElementById("rooms");
+ROOMS.forEach(r => {
+  const b = document.createElement("button");
+  b.textContent = r.label;
+  b.dataset.id = r.id;
+  b.onclick = () => viewer.loadScene(r.id);
+  nav.appendChild(b);
+});
+function setActive(id) {
+  nav.querySelectorAll("button").forEach(b => {
+    const on = b.dataset.id === id;
+    b.classList.toggle("active", on);
+    if (on) b.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   });
+}
+setActive(ROOMS[0].id);
+viewer.on("scenechange", setActive);
 
-  var startSlug = (location.hash || "").replace("#","");
-  if (!rooms.some(function(r){ return r.slug === startSlug; })) {
-    startSlug = rooms[0].slug;
-  }
-
-  var viewer = pannellum.viewer('pano', {
-    default:{
-      firstScene:startSlug,
-      sceneFadeDuration:650,
-      autoLoad:true,
-      showZoomCtrl:false,
-      showFullscreenCtrl:false,
-      showControls:false,
-      compass:false,
-      hotSpotDebug:false
-    },
-    scenes:scenes
-  });
-
-  var navEl = document.getElementById('nav');
-  var fadeEl = document.getElementById('stageFade');
-  var hintEl = document.getElementById('hint');
-
-  rooms.forEach(function(r){
-    var btn = document.createElement('button');
-    btn.type = "button";
-    btn.className = "pill" + (r.slug === startSlug ? " active" : "");
-    btn.textContent = r.name;
-    btn.dataset.slug = r.slug;
-    btn.addEventListener('click', function(){ goTo(r.slug); });
-    navEl.appendChild(btn);
-  });
-
-  function goTo(slug){
-    if (slug === viewer.getScene()) return;
-    fadeEl.classList.add('show');
-    viewer.loadScene(slug);
-    history.replaceState(null, "", "#" + slug);
-  }
-
-  function syncUI(slug){
-    Array.prototype.forEach.call(navEl.children, function(el){
-      el.classList.toggle('active', el.dataset.slug === slug);
-    });
-    var active = navEl.querySelector('.pill.active');
-    if (active && active.scrollIntoView) {
-      active.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
-    }
-  }
-
-  viewer.on('scenechange', function(slug){
-    syncUI(slug);
-    fadeEl.classList.remove('show');
-  });
-
-  syncUI(startSlug);
-
-  window.addEventListener('hashchange', function(){
-    var slug = (location.hash || "").replace("#","");
-    if (rooms.some(function(r){ return r.slug === slug; })) goTo(slug);
-  });
-
-  var dismissed = false;
-  function dismissHint(){
-    if (dismissed) return;
-    dismissed = true;
-    hintEl.style.opacity = '0';
-    setTimeout(function(){ hintEl.hidden = true; }, 650);
-  }
-  document.getElementById('pano').addEventListener('pointerdown', dismissHint, { once:true });
-  setTimeout(dismissHint, 6000);
-})();
+// Fullscreen
+document.getElementById("fsBtn").onclick = () => {
+  const d = document, el = d.documentElement;
+  if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+  else if (el.requestFullscreen || el.webkitRequestFullscreen) (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+};
+// iPhone Safari has no fullscreen API for pages — hide the button there
+if (!document.documentElement.requestFullscreen && !document.documentElement.webkitRequestFullscreen)
+  document.getElementById("fsBtn").style.display = "none";
 </script>
+</body>
+</html>
