@@ -1,0 +1,403 @@
+<title>Romm Convent · Type C11</title>
+
+<style>
+/* ---- Pannellum 2.5.6 engine styles (vendored, required for the viewer surface) ---- */
+.pnlm-container{margin:0;padding:0;overflow:hidden;position:relative;cursor:default;width:100%;height:100%;font-family:Helvetica,"Nimbus Sans L","Liberation Sans",Arial,sans-serif;background:#111;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;-ms-user-select:none;user-select:none;outline:0;line-height:1.4;contain:content}.pnlm-container *{box-sizing:content-box}.pnlm-ui{position:absolute;width:100%;height:100%;z-index:1}.pnlm-grab{cursor:grab}.pnlm-grabbing{cursor:grabbing}.pnlm-container:-moz-full-screen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:-webkit-full-screen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:-ms-fullscreen{height:100%!important;width:100%!important;position:static!important}.pnlm-container:fullscreen{height:100%!important;width:100%!important;position:static!important}.pnlm-render-container{cursor:inherit;position:absolute;height:100%;width:100%}.pnlm-load-box{position:absolute;top:50%;left:50%;width:200px;height:150px;margin:-75px 0 0 -100px;background-color:rgba(0,0,0,0.7);border-radius:3px;text-align:center;font-size:20px;display:none;color:#fff}.pnlm-load-box p{margin:20px 0}.pnlm-lbox{position:absolute;top:50%;left:50%;width:20px;height:20px;margin:-10px 0 0 -10px;display:none}.pnlm-loading{animation-duration:1.5s;-webkit-animation-duration:1.5s;animation-name:pnlm-mv;-webkit-animation-name:pnlm-mv;animation-iteration-count:infinite;-webkit-animation-iteration-count:infinite;animation-timing-function:linear;-webkit-animation-timing-function:linear;height:10px;width:10px;background-color:#fff;position:relative}@keyframes pnlm-mv{from{left:0;top:0}25%{left:10px;top:0}50%{left:10px;top:10px}75%{left:0;top:10px}to{left:0;top:0}}.pnlm-error-msg{display:none}.pnlm-hotspot-base{position:absolute;visibility:hidden;cursor:default;vertical-align:middle;top:0;z-index:1}.pnlm-world{position:absolute;left:50%;top:50%}.pnlm-face{position:absolute;-webkit-transform-origin:0 0;transform-origin:0 0}.pnlm-dragfix,.pnlm-preview-img{position:absolute;height:100%;width:100%}.pnlm-preview-img{background-size:cover;background-position:center}.pnlm-fade-img{position:absolute;top:0;left:0}.pnlm-pointer{cursor:pointer}
+
+/* ---- Page design ----
+   Layout: full-height immersive viewer (header / stage / filmstrip rail),
+   styled as a photographer's contact sheet — sprocket-perforated film
+   strip doubles as the room selector for this panoramic walkthrough. */
+:root{
+  --ink:#121316;
+  --surface:#1c1e23;
+  --surface-2:#26282e;
+  --fg:#f3f0e8;
+  --muted:#9a9da6;
+  --accent:#c7a461;
+  --line:rgba(243,240,232,0.14);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ink);
+  color:var(--fg);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding-inline:0;
+  height:100%;
+  overflow:hidden;
+}
+html{height:100%}
+
+.app{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  height:100dvh;
+}
+
+/* header */
+.bar{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 20px 12px;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  z-index:5;
+}
+.bar-left{display:flex;flex-direction:column;gap:2px;min-width:0}
+.eyebrow{
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:600;
+}
+.room-name{
+  font-family:'Fraunces',Georgia,'Times New Roman',serif;
+  font-size:clamp(18px,2.4vw,26px);
+  font-weight:500;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.counter{
+  font-size:12px;
+  color:var(--muted);
+  font-variant-numeric:tabular-nums;
+  padding-right:4px;
+  white-space:nowrap;
+}
+.ctrl-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--surface-2);
+  color:var(--fg);
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.ctrl-btn:hover{background:#2e3138;border-color:rgba(199,164,97,.4)}
+.ctrl-btn:active{transform:scale(.94)}
+.ctrl-btn.active{background:var(--accent);border-color:var(--accent);color:#1a1300}
+.ctrl-btn svg{width:18px;height:18px;display:block}
+.ctrl-btn:focus-visible, .thumb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* stage */
+.stage{
+  position:relative;
+  flex:1 1 auto;
+  min-height:0;
+  background:#000;
+}
+#pano{position:absolute;inset:0}
+.hint{
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  font-size:12px;
+  color:var(--muted);
+  background:rgba(18,19,22,.55);
+  backdrop-filter:blur(6px);
+  padding:7px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  pointer-events:none;
+  transition:opacity .6s ease;
+  white-space:nowrap;
+}
+.hint[hidden]{display:none}
+.unit-plaque{
+  position:absolute;
+  top:18px;
+  left:18px;
+  z-index:4;
+  background:rgba(18,19,22,.56);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border-left:2px solid var(--accent);
+  border-radius:0 8px 8px 0;
+  padding:12px 18px 13px 16px;
+  pointer-events:none;
+}
+.plaque-line1{
+  font-family:'Fraunces',Georgia,'Times New Roman',serif;
+  font-size:19px;
+  font-weight:600;
+  letter-spacing:.01em;
+  color:var(--fg);
+  white-space:nowrap;
+}
+.plaque-line1 .unit-sep{color:var(--accent);margin:0 7px;font-weight:400}
+.plaque-rule{
+  width:28px;
+  height:1px;
+  background:var(--line);
+  margin:7px 0;
+}
+.plaque-line3,.plaque-line4{
+  font-size:11.5px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:600;
+  line-height:1.6;
+}
+.plaque-line3{color:#d8d5cc}
+@media (max-width:560px){
+  .unit-plaque{top:12px;left:12px;padding:9px 14px 10px 12px}
+  .plaque-line1{font-size:16px}
+}
+.stage-fade{
+  position:absolute;inset:0;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .4s ease;
+  pointer-events:none;
+  opacity:0;
+  z-index:3;
+}
+.stage-fade.show{opacity:1;pointer-events:auto}
+.spin{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid var(--line);
+  border-top-color:var(--accent);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* filmstrip rail */
+.rail-wrap{
+  flex:0 0 auto;
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.sprocket{
+  height:7px;
+  background-image:radial-gradient(circle,var(--ink) 2.5px,transparent 2.6px);
+  background-size:18px 7px;
+  background-position:9px center;
+  opacity:.9;
+}
+.rail{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:12px 16px;
+  scrollbar-width:thin;
+}
+.rail::-webkit-scrollbar{height:6px}
+.rail::-webkit-scrollbar-thumb{background:var(--surface-2);border-radius:3px}
+
+.thumb{
+  position:relative;
+  flex:0 0 auto;
+  width:108px;
+  height:68px;
+  border-radius:6px;
+  overflow:hidden;
+  cursor:pointer;
+  border:2px solid transparent;
+  background-size:cover;
+  background-position:center 42%;
+  transition:border-color .15s ease, transform .15s ease, filter .15s ease;
+  filter:brightness(.72) saturate(.9);
+}
+.thumb:hover{transform:translateY(-2px);filter:brightness(.92) saturate(1)}
+.thumb.active{border-color:var(--accent);filter:brightness(1) saturate(1)}
+.thumb-num{
+  position:absolute;top:4px;left:5px;
+  font-size:9px;font-variant-numeric:tabular-nums;
+  color:rgba(243,240,232,.85);
+  letter-spacing:.05em;
+}
+.thumb-label{
+  position:absolute;left:6px;right:6px;bottom:4px;
+  font-size:10.5px;
+  line-height:1.15;
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+  font-weight:600;
+}
+
+@media (max-width:560px){
+  .bar{padding-left:16px;padding-right:16px}
+  .eyebrow{display:none}
+  .counter{display:none}
+  .thumb{width:86px;height:56px}
+}
+</style>
+
+<div class="app">
+  <header class="bar">
+    <div class="bar-left">
+      <span class="eyebrow">Romm Convent &middot; 360&deg; Walkthrough</span>
+      <span class="room-name" id="roomName">Entrance Foyer</span>
+    </div>
+    <div class="bar-right">
+      <span class="counter" id="counter">1 / 10</span>
+      <button class="ctrl-btn" id="btnRotate" title="Toggle auto-rotate" aria-label="Toggle auto-rotate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><path d="M21 3v5h-5"/></svg>
+      </button>
+      <button class="ctrl-btn" id="btnZoomIn" title="Zoom in" aria-label="Zoom in">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+      </button>
+      <button class="ctrl-btn" id="btnZoomOut" title="Zoom out" aria-label="Zoom out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M8 11h6"/></svg>
+      </button>
+      <button class="ctrl-btn" id="btnFull" title="Fullscreen" aria-label="Fullscreen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div id="pano"></div>
+    <div class="unit-plaque">
+      <div class="plaque-line1">Type C11<span class="unit-sep">&middot;</span>117 sq.m.</div>
+      <div class="plaque-rule"></div>
+      <div class="plaque-line3">2BR Plus, 2BA</div>
+      <div class="plaque-line4">Floor 5</div>
+    </div>
+    <div class="hint" id="hint">Drag to look around &nbsp;&middot;&nbsp; scroll to zoom</div>
+    <div class="stage-fade" id="stageFade"><div class="spin"></div></div>
+  </div>
+
+  <div class="rail-wrap">
+    <div class="sprocket"></div>
+    <nav class="rail" id="rail" aria-label="Rooms"></nav>
+  </div>
+</div>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pannellum/2.5.6/pannellum.js"></script>
+<script>
+(function(){
+  var rooms = [
+    { id:"s1",  file:"panos/01-entrance.jpg",        name:"Entrance Foyer" },
+    { id:"s2",  file:"panos/02-living-room.jpg",      name:"Living Room" },
+    { id:"s3",  file:"panos/03-powder-room.jpg",      name:"Powder Room" },
+    { id:"s4",  file:"panos/04-hallway.jpg",          name:"Hallway" },
+    { id:"s5",  file:"panos/05-guest-bathroom.jpg",   name:"Guest Bathroom" },
+    { id:"s6",  file:"panos/06-master-hall.jpg",      name:"Master Suite Hall" },
+    { id:"s7",  file:"panos/07-master-bathroom.jpg",  name:"Master Bathroom" },
+    { id:"s8",  file:"panos/08-master-bedroom.jpg",   name:"Master Bedroom" },
+    { id:"s9",  file:"panos/09-bedroom-view.jpg",     name:"Bedroom View" },
+    { id:"s10", file:"panos/10-kitchen-dining.jpg",   name:"Kitchen &amp; Dining" }
+  ];
+
+  var scenes = {};
+  rooms.forEach(function(r){
+    scenes[r.id] = {
+      type:"equirectangular",
+      panorama:r.file,
+      title:r.name,
+      hfov:112,
+      minHfov:50,
+      maxHfov:120,
+      pitch:2,
+      yaw:0,
+      autoLoad:true
+    };
+  });
+
+  var viewer = pannellum.viewer('pano', {
+    default:{
+      firstScene:"s1",
+      sceneFadeDuration:700,
+      autoLoad:true,
+      showZoomCtrl:false,
+      showFullscreenCtrl:false,
+      showControls:false,
+      compass:false,
+      hotSpotDebug:false
+    },
+    scenes:scenes
+  });
+
+  var railEl = document.getElementById('rail');
+  var roomNameEl = document.getElementById('roomName');
+  var counterEl = document.getElementById('counter');
+  var fadeEl = document.getElementById('stageFade');
+  var hintEl = document.getElementById('hint');
+  var rotating = false;
+
+  rooms.forEach(function(r, i){
+    var btn = document.createElement('button');
+    btn.type = "button";
+    btn.className = "thumb" + (i === 0 ? " active" : "");
+    btn.style.backgroundImage = "url('" + r.file + "')";
+    btn.dataset.id = r.id;
+    btn.setAttribute('aria-label', 'Go to ' + r.name);
+    btn.innerHTML =
+      '<span class="thumb-num">' + String(i+1).padStart(2,'0') + '</span>' +
+      '<span class="thumb-label">' + r.name + '</span>';
+    btn.addEventListener('click', function(){ goTo(r.id); });
+    railEl.appendChild(btn);
+  });
+
+  function goTo(id){
+    if (id === viewer.getScene()) return;
+    fadeEl.classList.add('show');
+    viewer.loadScene(id);
+  }
+
+  function syncUI(id){
+    var idx = rooms.findIndex(function(r){ return r.id === id; });
+    if (idx < 0) return;
+    roomNameEl.textContent = rooms[idx].name.replace('&amp;','&');
+    counterEl.textContent = (idx+1) + ' / ' + rooms.length;
+    Array.prototype.forEach.call(railEl.children, function(el, i){
+      el.classList.toggle('active', i === idx);
+    });
+    var active = railEl.children[idx];
+    if (active && active.scrollIntoView) {
+      active.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    }
+  }
+
+  viewer.on('scenechange', function(id){
+    syncUI(id);
+    fadeEl.classList.remove('show');
+  });
+
+  syncUI('s1');
+
+  document.getElementById('btnZoomIn').addEventListener('click', function(){
+    viewer.setHfov(viewer.getHfov() - 12, 200);
+  });
+  document.getElementById('btnZoomOut').addEventListener('click', function(){
+    viewer.setHfov(viewer.getHfov() + 12, 200);
+  });
+  document.getElementById('btnFull').addEventListener('click', function(){
+    try { viewer.toggleFullscreen(); } catch(e){}
+  });
+  document.getElementById('btnRotate').addEventListener('click', function(e){
+    rotating = !rotating;
+    e.currentTarget.classList.toggle('active', rotating);
+    if (rotating) { viewer.startAutoRotate(-2.2); }
+    else { viewer.stopAutoRotate(); }
+  });
+
+  var dismissed = false;
+  function dismissHint(){
+    if (dismissed) return;
+    dismissed = true;
+    hintEl.style.opacity = '0';
+    setTimeout(function(){ hintEl.hidden = true; }, 650);
+  }
+  document.getElementById('pano').addEventListener('pointerdown', dismissHint, { once:true });
+  setTimeout(dismissHint, 6000);
+})();
+</script>
