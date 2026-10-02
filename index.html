@@ -8,7 +8,7 @@
 <!-- Share preview (LINE / Facebook) -->
 <meta property="og:title" content="Nexspace Realty Exclusive at Romm Convent">
 <meta property="og:description" content="Type C11 · 117 sqm · 2BR Plus, 2BA · Floor 5 — 360° virtual tour">
-<meta property="og:image" content="images/01-living-room.jpg">
+<meta property="og:image" content="living-room.jpg">
 
 <style>/* Pannellum 2.5.6 (MIT) */
 /* Pannellum 2.5.6, https://github.com/mpetroff/pannellum */
@@ -225,16 +225,16 @@ const CONTACT = {
 // Order here = order of the buttons. First one opens first.
 // yaw = which direction the view starts facing (degrees, -180 to 180).
 const ROOMS = [
-  { id: "living",    label: "Living room",     image: "images/01-living-room.jpg",     yaw: 0 },
-  { id: "balcony",   label: "Balcony",         image: "images/02-balcony.jpg",         yaw: 0 },
-  { id: "hallway",   label: "Hallway",         image: "images/03-hallway.jpg",         yaw: 0 },
-  { id: "bed2",      label: "Bedroom 2",       image: "images/04-bedroom-2.jpg",       yaw: 0 },
-  { id: "bath2",     label: "Bathroom 2",      image: "images/05-bathroom-2.jpg",      yaw: 0 },
-  { id: "master",    label: "Master bedroom",  image: "images/06-master-bedroom.jpg",  yaw: 0 },
-  { id: "masterbath",label: "Master bathroom", image: "images/07-master-bathroom.jpg", yaw: 0 },
-  { id: "closet",    label: "Built-in closet", image: "images/08-built-in-closet.jpg", yaw: 0 },
-  { id: "view",      label: "Open view",       image: "images/09-open-view.jpg",       yaw: 0 },
-  { id: "dining",    label: "Dining",          image: "images/10-dining.jpg",          yaw: 0 },
+  { id: "living",    label: "Living room",     image: "living-room.jpg",     yaw: 0 },
+  { id: "balcony",   label: "Balcony",         image: "balcony.jpg",         yaw: 0 },
+  { id: "hallway",   label: "Hallway",         image: "hallway.jpg",         yaw: 0 },
+  { id: "bed2",      label: "Bedroom 2",       image: "bedroom-2.jpg",       yaw: 0 },
+  { id: "bath2",     label: "Bathroom 2",      image: "bathroom-2.jpg",      yaw: 0 },
+  { id: "master",    label: "Master bedroom",  image: "master-bedroom.jpg",  yaw: 0 },
+  { id: "masterbath",label: "Master bathroom", image: "master-bathroom.jpg", yaw: 0 },
+  { id: "closet",    label: "Built-in closet", image: "built-in-closet.jpg", yaw: 0 },
+  { id: "view",      label: "Open view",       image: "open-view.jpg",       yaw: 0 },
+  { id: "dining",    label: "Dining",          image: "dining.jpg",          yaw: 0 },
 ];
 /* ===================================================================== */
 
@@ -297,7 +297,7 @@ viewer.on("scenechange", setActive);
 viewer.on("error", () => {
   const msg = location.protocol === "file:"
     ? "Please open the tour from its GitHub Pages link (https://…github.io/…). Browsers block 360° photos when the file is opened directly from your computer."
-    : "A 360° photo could not be loaded. Check that the <b>images</b> folder was uploaded to GitHub with the same file names.";
+    : "A 360° photo could not be loaded. Check that all 10 photos were uploaded to GitHub next to index.html, with the same file names.";
   const box = document.createElement("div");
   box.style.cssText = "position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-width:420px;background:#fff;color:#111;padding:18px 22px;border-radius:14px;font:600 15px/1.45 var(--font);z-index:9;text-align:center";
   box.innerHTML = msg; document.body.appendChild(box);
